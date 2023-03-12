@@ -1,37 +1,41 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     "name": "hello-word-plugin",
     "description": "vue3版本的chrome插件",
     "version": "1.0.0",
-    "browser_action": {
-        "default_title": "hello-word-plugin",
-        "default_icon": "assets/icon48.png",
-        "default_popup": "popup.html"
-    },
-    "permissions": [],
-    "background": {
-        "scripts": [
-            "js/background.js"
-        ]
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "assets/icon48.png",
+            "32": "assets/icon48.png",
+            "48": "assets/icon48.png",
+            "128": "assets/icon48.png"
+        }
     },
     "icons": {
-        "16": "assets/icon16.png",
+        "16": "assets/icon48.png",
+        "32": "assets/icon48.png",
         "48": "assets/icon48.png",
-        "128": "assets/icon128.png"
+        "128": "assets/icon48.png"
+    },
+    "host_permissions": [
+        "https://*.openai.com/"
+    ],
+    "background": {
+        "service_worker": "js/background.js"
     },
     "content_scripts": [
         {
             "matches": [
-                "http://*/*",
-                "https://*/*"
+                "https://www.zhihu.com/question/*"
             ],
-            "css": ["css/popup.css"],
-            "js": ["js/chunk-vendors.js"],
-            "run_at": "document_idle"
+            "js": [
+                "js/chunk-vendors.js"
+            ],
+            "css": [
+                "css/popup.css"
+            ],
+            "run_at": "document_end"
         }
-    ],
-    "web_accessible_resources": [
-        "js/inject.js"
-    ],
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+    ]
 }
