@@ -14,6 +14,10 @@ const copyFiles = [
   {
     from: path.resolve("src/plugins/inject.js"),
     to: path.resolve("dist/js")
+  },
+  {
+    from: path.resolve("src/content/content.css"),
+    to: path.resolve("dist/css")
   }
 ];
 
@@ -26,6 +30,7 @@ const plugins = [
 
 //页面文件
 const pages = {};
+
 //配置popup.html页面
 const chromeName = ["popup"];
 
@@ -35,6 +40,8 @@ chromeName.forEach(name => {
     template: `src/${name}/index.html`,
     filename: `${name}.html`
   };
+
+  console.log(JSON.stringify(pages, null, 2));
 });
 
 module.exports = {
@@ -43,12 +50,16 @@ module.exports = {
   //配置content.js和background.js
   configureWebpack: {
     entry: {
+      content: "./src/content/main.js",
       background: "./src/background/main.js"
     },
     output: {
       filename: "js/[name].js"
     },
-    plugins
+    plugins,
+
+    // solve: Uncaught EvalError: Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of script in the following Content Security Policy directive: "script-src 'self' 'wasm-unsafe-eval'".
+    devtool: 'cheap-module-source-map'
   },
   //配置content.css
   css: {

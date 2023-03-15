@@ -3,15 +3,6 @@
     "name": "hello-word-plugin",
     "description": "vue3版本的chrome插件",
     "version": "1.0.0",
-    "action": {
-        "default_popup": "popup.html",
-        "default_icon": {
-            "16": "assets/icon48.png",
-            "32": "assets/icon48.png",
-            "48": "assets/icon48.png",
-            "128": "assets/icon48.png"
-        }
-    },
     "icons": {
         "16": "assets/icon48.png",
         "32": "assets/icon48.png",
@@ -30,10 +21,11 @@
                 "https://www.zhihu.com/question/*"
             ],
             "js": [
-                "js/chunk-vendors.js"
+                "js/chunk-vendors.js",
+                "js/content.js"
             ],
             "css": [
-                "css/popup.css"
+                "css/content.css"
             ],
             "run_at": "document_end"
         }
