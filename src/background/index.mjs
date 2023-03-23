@@ -1,47 +1,7 @@
 import ExpiryMap from "expiry-map";
 import { v4 as uuidv4 } from "uuid";
 import Browser from "webextension-polyfill";
-// import { fetchSSE } from "./fetch-sse.js";
-
-
-
-
-import { createParser } from "eventsource-parser";
-// import { streamAsyncIterable } from "./stream-async-iterable.js";
-
-async function* streamAsyncIterable(stream) {
-    const reader = stream.getReader();
-    try {
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) {
-          return;
-        }
-        yield value;
-      }
-    } finally {
-      reader.releaseLock();
-    }
-}
-
-async function fetchSSE(resource, options) {
-  const { onMessage, ...fetchOptions } = options;
-  const resp = await fetch(resource, fetchOptions);
-  const parser = createParser((event) => {
-    if (event.type === "event") {
-      onMessage(event.data);
-    }
-  });
-  for await (const chunk of streamAsyncIterable(resp.body)) {
-    const str = new TextDecoder().decode(chunk);
-    parser.feed(str);
-  }
-}
-
-
-
-
-
+import { fetchSSE } from "./fetch-sse.mjs";
 
 const KEY_ACCESS_TOKEN = "accessToken";
 
@@ -66,6 +26,7 @@ async function getAnswer(port, question) {
 
   const controller = new AbortController();
   port.onDisconnect.addListener(() => {
+    console.error("onDisconnect...");
     controller.abort();
   });
   console.log("question", question);
@@ -100,7 +61,14 @@ async function getAnswer(port, question) {
         // deleteConversation();
         return;
       }
-      const data = JSON.parse(message);
+
+      let data = "";
+      try {
+        data = JSON.parse(message);
+      } catch (err) {
+        console.error("sse message error", err);
+      }
+
       const text = data.message?.content?.parts?.[0];
       // conversationId = data.conversation_id;
       if (text) {
@@ -116,12 +84,11 @@ async function getAnswer(port, question) {
 
 Browser.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
-    console.debug("received msg", msg);
     console.log("received msg", msg);
     try {
       await getAnswer(port, msg.question);
     } catch (err) {
-      console.error(err);
+      console.error("catch error", err);
       port.postMessage({ error: err.message });
       cache.delete(KEY_ACCESS_TOKEN);
     }

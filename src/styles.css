@@ -1,17 +1,17 @@
-.chatgpt-zhihu {
-  --chatgpt-zhihu-bg-color: #fff;
-  --chatgpt-zhihu-border-color: #f6f6f6;
-  --chatgpt-tooptip-color: #fff;
+.chat-gpt-zhihu {
+  --chat-gpt-zhihu-bg-color: #fff;
+  --chat-gpt-zhihu-border-color: #f6f6f6;
+  --chat-gpt-tooptip-color: #fff;
 }
 
-.chatgpt-zhihu.dark {
-  --chatgpt-zhihu-bg-color: #121212;
-  --chatgpt-zhihu-border-color: #1b1b1b;
-  --chatgpt-tooptip-color: #121212;
+.chat-gpt-zhihu.dark {
+  --chat-gpt-zhihu-bg-color: #121212;
+  --chat-gpt-zhihu-border-color: #1b1b1b;
+  --chat-gpt-tooptip-color: #121212;
 }
 
-.chatgpt-zhihu {
-  background: var(--chatgpt-zhihu-bg-color);
+.chat-gpt-zhihu {
+  background: var(--chat-gpt-zhihu-bg-color);
   border-radius: 2px;
   -webkit-box-shadow: 0 1px 3px hsl(0deg 0% 7% / 10%);
   box-shadow: 0 1px 3px hsl(0deg 0% 7% / 10%);
@@ -19,13 +19,13 @@
   box-sizing: border-box;
   margin-bottom: 10px;
 }
-.chatgpt-zhihu-header {
+.chat-gpt-zhihu-header {
   -webkit-box-pack: justify;
   -ms-flex-pack: justify;
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  border-bottom: 1px solid var(--chatgpt-zhihu-border-color);
+  border-bottom: 1px solid var(--chat-gpt-zhihu-border-color);
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   display: -webkit-box;
@@ -36,45 +36,45 @@
   padding: 0 20px;
 }
 
-.chatgpt-zhihu-header-text {
+.chat-gpt-zhihu-header-text {
   font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.chatgpt-zhihu-icon-container {
+.chat-gpt-zhihu-icon-container {
   display: flex;
 }
-.chatgpt-zhihu-header-icon {
+.chat-gpt-zhihu-header-icon {
   width: 25px;
   height: 25px;
   stroke: #056de8;
   fill: none;
   cursor: pointer;
 }
-.chatgpt-zhihu-header-icon.ok {
+.chat-gpt-zhihu-header-icon.ok {
   display: none;
 }
 
-.chatgpt-zhihu-tryagain {
+.chat-gpt-zhihu-tryagain {
   margin-left: 20px;
 }
-.chatgpt-zhihu-tooltip {
+.chat-gpt-zhihu-tooltip {
   position: relative;
   display: inline-block;
 }
 
-.chatgpt-zhihu-tooltip:hover .tooltiptext {
+.chat-gpt-zhihu-tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
 }
 
-.chatgpt-zhihu-tooltip .tooltiptext {
+.chat-gpt-zhihu-tooltip .tooltiptext {
   visibility: hidden;
   position: absolute;
   width: 120px;
   background-color: #555;
-  color: var(--chatgpt-tooptip-color);
+  color: var(--chat-gpt-tooptip-color);
   text-align: center;
   padding: 5px 0;
   border-radius: 6px;
@@ -98,15 +98,15 @@
   border-color: #555 transparent transparent transparent;
 }
 
-.chatgpt-zhihu-answer {
+.chat-gpt-zhihu-answer {
   padding: 20px;
   white-space: pre-wrap;
 }
 
-.chatgpt-zhihu-hidden {
+.chat-gpt-zhihu-hidden {
   display: none;
 }
 
-.chatgpt-zhihu-show {
+.chat-gpt-zhihu-show {
   display: block;
 }

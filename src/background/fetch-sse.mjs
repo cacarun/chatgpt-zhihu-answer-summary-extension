@@ -1,5 +1,5 @@
 import { createParser } from "eventsource-parser";
-import { streamAsyncIterable } from "./stream-async-iterable.js";
+import { streamAsyncIterable } from "./stream-async-iterable.mjs";
 
 export async function fetchSSE(resource, options) {
   const { onMessage, ...fetchOptions } = options;

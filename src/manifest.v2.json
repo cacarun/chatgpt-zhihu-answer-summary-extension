@@ -1,0 +1,25 @@
+{
+  "name": "ChatGPT for Zhihu Summary",
+  "description": "Display ChatGPT Summary for Zhihu Answers",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "icons": {
+    "16": "assets/icon48.png",
+    "32": "assets/icon48.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon48.png"
+  },
+  "permissions": ["webRequest", "https://*.openai.com/"],
+  "background": {
+    "scripts": ["background/index.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.zhihu.com/question/*"],
+      "include_globs": ["https://www.zhihu.com/question/*"],
+      "js": ["content-script/index.js"],
+      "css": ["styles.css"],
+      "run_at": "document_end"
+    }
+  ]
+}
