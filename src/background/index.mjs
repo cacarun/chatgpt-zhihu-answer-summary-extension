@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import Browser from "webextension-polyfill";
 import { fetchSSE } from "./fetch-sse.mjs";
 import cheerio from "cheerio";
+import { getSummaryPrompt } from "./prompt.mjs";
 
 const KEY_ACCESS_TOKEN = "accessToken";
 
@@ -32,15 +33,61 @@ async function getAccessToken() {
   return data.accessToken;
 }
 
-async function getAnswer(port, question) {
+async function requestBackendAPI(token, method, path, data) {
+  return fetch(`https://chat.openai.com/backend-api${path}`, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: data === undefined ? undefined : JSON.stringify(data),
+  })
+}
+
+async function fetchModels(token) {
+  const resp = await requestBackendAPI(token, 'GET', '/models').then((r) => r.json())
+  return resp.models
+}
+
+async function getModelName(token) {
+  try {
+    const models = await fetchModels(token)    
+    return models[0].slug
+  } catch (err) {
+    console.error(err)
+    return 'text-davinci-002-render-sha'
+  }
+}
+
+async function setConversationProperty(
+  token,
+  conversationId,
+  propertyObject
+) {
+  await requestBackendAPI(token, 'PATCH', `/conversation/${conversationId}`, propertyObject)
+}
+
+async function getAnswer(port, prompt) {
   const accessToken = await getAccessToken();
+
+  let conversationId = ""
+
+  const cleanup = () => {
+    if (conversationId && conversationId.trim().length > 0) {
+      console.log("[cleanup] conversationId=", conversationId)
+      setConversationProperty(accessToken, conversationId, { is_visible: false })
+    }
+  }
 
   const controller = new AbortController();
   port.onDisconnect.addListener(() => {
     console.error("onDisconnect...");
     controller.abort();
   });
-  console.log("question", question);
+  console.log("[getAnswer] prompt=", prompt);
+
+  const modelName = await getModelName(accessToken)
+  console.log('[getAnswer] modelName=', modelName);
 
   await fetchSSE("https://chat.openai.com/backend-api/conversation", {
     method: "POST",
@@ -57,19 +104,17 @@ async function getAnswer(port, question) {
           role: "user",
           content: {
             content_type: "text",
-            parts: [question],
+            parts: [prompt],
           },
         },
       ],
-      model: "text-davinci-002-render",
-      // model: "text-davinci-002-render-next",
+      model: modelName,
       parent_message_id: uuidv4(),
     }),
     onMessage(message) {
-      console.info("sse message", message);
+      console.info("[getAnswer] sse message", message);
       if (message === "[DONE]") {
-        // port.postMessage({ event: "DONE" });
-        // deleteConversation();
+        cleanup()
         return;
       }
 
@@ -77,20 +122,20 @@ async function getAnswer(port, question) {
       try {
         data = JSON.parse(message);
       } catch (err) {
-        console.error("sse message error", err);
+        console.error("[getAnswer] sse message error", err);
       }
 
       const text = data.message?.content?.parts?.[0];
-      // conversationId = data.conversation_id;
+      conversationId = data.conversation_id
       if (text) {
         port.postMessage({
-          answer: text,
-          // messageId: data.message.id,
-          // conversationId: data.conversation_id,
+          answer: text
         });
       }
     },
   });
+
+  return { cleanup }
 }
 
 async function requestZhihuData() {
@@ -133,6 +178,20 @@ async function requestZhihuData() {
   }
 }
 
+function getPrompt(title, answerDict) {
+  const text = Object.values(answerDict).join(" ");
+  const prompt = getSummaryPrompt(text);
+  console.log('[getPrompt] prompt=', prompt)
+
+  const queryText = `
+说明：请用中文总结以下内容。
+标题：${title}
+内容：${prompt}`
+
+  console.log('[getPrompt] queryText=', queryText)
+  return queryText;
+}
+
 
 Browser.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
@@ -151,8 +210,10 @@ Browser.runtime.onConnect.addListener((port) => {
     var input = ""
     if (msg.type === 'answer') {
       input = `${zhTitle} ${zhSubTitle}`
+      console.log("[answer] input=", input)
     } else if (msg.type === 'summary') {
-
+      input = getPrompt(zhTitle, zhAnswerDict)
+      console.log("[summary] input prompt=", input)
     }
     try {
       await getAnswer(port, input);
