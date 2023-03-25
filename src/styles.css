@@ -44,13 +44,21 @@
 
 .chat-gpt-zhihu-icon-container {
   display: flex;
+  justify-content: center; 
+  align-items: center; 
 }
 .chat-gpt-zhihu-header-icon {
-  width: 25px;
-  height: 25px;
-  stroke: #056de8;
-  fill: none;
+  width: 40px;
+  height: 20px;
+  border: 1px solid;
+  border-radius: 3px;
   cursor: pointer;
+  text-align: center;
+  background-color: #056de8;
+  color:#fff;
+  padding: 2px 3px;
+  font-size: 14px;
+  margin: 0px 2px;
 }
 .chat-gpt-zhihu-header-icon.ok {
   display: none;
