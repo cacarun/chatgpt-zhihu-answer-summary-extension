@@ -158,7 +158,7 @@ async function requestZhihuData() {
     }
     var subTitle = initialState.entities.questions[questionId].detail;
     if (subTitle && subTitle.trim().length > 0) {
-      console.log('[requestZhihuData] before subTitle:', subTitle);
+      // console.log('[requestZhihuData] before subTitle:', subTitle);
       zhSubTitle = cheerio.load(subTitle).text();
     }
     console.log('[requestZhihuData] title:', zhTitle, ' subTitle:', zhSubTitle);
@@ -166,10 +166,12 @@ async function requestZhihuData() {
     const answers = initialState.entities.answers;
     Object.keys(answers).forEach((key) => {
       var answer = answers[key].content
-      console.log('[requestZhihuData] before answer:', answer);
+      // console.log('[requestZhihuData] before answer:', answer);
       answer = cheerio.load(answer).text();
-      console.log('[requestZhihuData] after answer:', answer);
-      zhAnswerDict[key] = answer;
+      // console.log('[requestZhihuData] after answer:', answer);
+      if (answer && answer.trim().length > 300) {
+        zhAnswerDict[key] = answer;
+      }
     });
     console.log('[requestZhihuData] zhAnswerDict:', zhAnswerDict);
 

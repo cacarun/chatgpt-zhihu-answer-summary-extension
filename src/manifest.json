@@ -1,13 +1,13 @@
 {
-  "name": "ChatGPT for Zhihu Summary",
-  "description": "Display ChatGPT Summary for Zhihu Answers",
+  "name": "ChatGPT for Zhihu (Answer or Summary)",
+  "description": "Display ChatGPT Answer or Summary for Zhihu",
   "version": "1.0.0",
   "manifest_version": 3,
   "icons": {
-    "16": "assets/icon48.png",
-    "32": "assets/icon48.png",
+    "16": "assets/icon16.png",
+    "32": "assets/icon32.png",
     "48": "assets/icon48.png",
-    "128": "assets/icon48.png"
+    "128": "assets/icon128.png"
   },
   "host_permissions": ["https://*.openai.com/"],
   "background": {
