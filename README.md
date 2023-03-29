@@ -1,4 +1,4 @@
-# 插件说明
+## 插件说明
 
 用 ChatGPT 回答和总结知乎的问题，作为问题答案的参考。
 
@@ -11,7 +11,7 @@
 3. 复制 ChatGPT 的回答。
 
 
-## 安装
+## 插件安装
 
 ### chrome 应用商店安装
 
@@ -19,7 +19,7 @@
 
 ### 本地安装
 
-1. 下载 `*.zip` from [Releases](https://github.com/cacarun/chatgpt-zhihu-summary-extension/releases)
+1. 下载 `*.zip` from [Releases](https://github.com/cacarun/chatgpt-zhihu-answer-summary-extension/releases)
 2. 解压 zip
 3. 打开网址 `chrome://extensions`
 4. 打开开发者模式
